@@ -76,7 +76,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{-- Funcion que indica que pagine nuestros registros --}}
                         {{ $categoria->links() }}
                     </div>
                 </div>
