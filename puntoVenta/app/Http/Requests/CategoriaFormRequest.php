@@ -17,13 +17,15 @@ class CategoriaFormRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
     public function rules(): array
     {
         return [
-            'categoria' => 'required|max:50',
-            'descripcion' => 'max:256',
+            //
+            'nombre'=>'required|max:50',
+            'descripcion'=>'max:256',
         ];
     }
 }
+

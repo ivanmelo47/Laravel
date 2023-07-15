@@ -1,5 +1,6 @@
-@extends ('layouts.admin')
-@section ('contenido')
+@extends('layouts.admin')
+
+@section('contenido')
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -25,7 +26,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="col-xl-12">
-                        <form action="{{ route('categoria.index') }}" method="get">
+                        <form action="{{ route('categoria') }}" method="get">
 
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -38,7 +39,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="input-group mb-6">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
-                                        <a href="{{ route('categoria.create') }}" class="btn btn-success">Nueva</a>
+                                        <a href="{{ route('categoria.crear') }}" class="btn btn-success">Nueva</a>
                                     </div>
                                 </div>
                             </div>
@@ -50,8 +51,8 @@
                     <div class="card-body">
                     </div>
                     <!-- table hover -->
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                    <div class="table-responsive" id="table-listado">
+                        <table class="table table-hover table-bordered mb-0">
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
@@ -64,20 +65,47 @@
                                 @foreach ($categoria as $cat)
                                 <tr>
                                     <td>
-                                        <a href="#" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a>
-                                        <!-- Button trigger for danger theme modal -->
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-delete"><i class="fas fa-trash-alt"></i></button>
+                                        <a href="{{ route('categoria.edit', $cat->id_categoria) }}" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a>
+                                        <a href="#" class="btn btn-outline-danger btn-sm" onclick="eliminarCategoria({{ $cat->id_categoria }})"><i class="fas fa-trash-alt"></i></a>
+                                        <form id="delete-form-{{ $cat->id_categoria }}" action="{{ route('categoria.destroy', $cat->id_categoria) }}" method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </td>
-                                    <td>{{ $cat->id_categoria}}</td>
-                                    <td>{{ $cat->categoria}}</td>
-                                    <td>{{ $cat->descripcion}}</td>
-
+                                    <td>{{ $cat->id_categoria }}</td>
+                                    <td>{{ $cat->categoria }}</td>
+                                    <td>{{ $cat->descripcion }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                         {{ $categoria->links() }}
                     </div>
+
+                    <div class="list-group" id="grid-listado" style="display: none;">
+                        @foreach ($categoria as $cat)
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="https://via.placeholder.com/150" alt="Imagen">
+                                </div>
+                                <div class="col-md-9">
+                                    <h5 class="mt-3">{{ $cat->categoria }}</h5>
+                                    <p>{{ $cat->descripcion }}</p>
+                                    <div class="text-end">
+                                        <a href="{{ route('categoria.edit', $cat->id_categoria) }}" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a>
+                                        <a href="#" class="btn btn-outline-danger btn-sm" onclick="eliminarCategoria({{ $cat->id_categoria }})"><i class="fas fa-trash-alt"></i></a>
+                                        <form id="delete-form-{{ $cat->id_categoria }}" action="{{ route('categoria.destroy', $cat->id_categoria) }}" method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -85,4 +113,33 @@
 </section>
 <!-- Hoverable rows end -->
 
+<button id="alternar-listado" class="btn btn-primary">Alternar Listado</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  $("#alternar-listado").click(function() {
+    $("#table-listado").toggle();
+    $("#grid-listado").toggle();
+  });
+});
+
+function eliminarCategoria(id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.getElementById('delete-form-' + id).submit();
+    }
+  });
+}
+</script>
 @endsection
