@@ -8,6 +8,8 @@ use App\Models\Producto;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\CategoriaFormRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -36,10 +38,8 @@ class ProductoController extends Controller
      */
     public function crear()
     {
-        //
-        $categorias = DB::table('categoria');
-
-        return view('almacen.producto.crear');
+        $categorias = DB::table('categoria')->where('estatus', '=', '1')->get();
+        return view('almacen.producto.crear', ["categorias" => $categorias]);
     }
 
     /**
@@ -47,35 +47,43 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        // Validación de los datos ingresados en el formulario
-        $request->validate([
-            'categoria' => 'required',
+        // Validación de los campos
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required|unique:producto,nombre',
             'stock' => 'required|integer|min:1',
             'descripcion' => 'required',
-            'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Añade cualquier validación adicional para la imagen si es necesario
+            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Crear un nuevo objeto Producto con los datos del formulario
-        $producto = new Producto();
-        $producto->categoria = $request->input('categoria');
-        $producto->stock = $request->input('stock');
-        $producto->descripcion = $request->input('descripcion');
-
-        // Procesar y guardar la imagen si se ha subido
-        if ($request->hasFile('imagen')) {
-            $imagen = $request->file('imagen');
-            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-            $rutaImagen = public_path('/imagenes/productos');
-            $imagen->move($rutaImagen, $nombreImagen);
-            $producto->imagen = $nombreImagen;
+        // Comprueba si la validación falla
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Guardar el objeto Producto en la base de datos
-        $producto->save();
+        // Si la validación pasa, crea el registro
+        $validatedData = $validator->validated();
+        $validatedData['estado'] = '1';
+        $validatedData['id_categoria'] = $request->id_categoria;
 
-        // Redirigir o realizar cualquier otra acción que necesites después de guardar el producto
+        // Guardar la imagen en el servidor
+        if ($request->hasFile('imagen')) {
+            $imagen = $request->file('imagen');
+            $nombreImagen = Str::random(30) . '_' . time() . '.' . $imagen->getClientOriginalExtension();
+            $rutaImagen = $imagen->storeAs('public/imagenes/productos', $nombreImagen);
 
-        return redirect()->route('producto.index'); // Ejemplo de redirección a la página de listado de productos
+            // Verificar si la carpeta existe y crearla si es necesario
+            $directorio = public_path('imagenes/productos');
+            if (!File::exists($directorio)) {
+                File::makeDirectory($directorio, 0755, true);
+            }
+
+            $imagen->move($directorio, $nombreImagen);
+            $validatedData['imagen'] = $nombreImagen;
+        }
+
+        Producto::create($validatedData);
+
+        return redirect('producto');
     }
 
     /**

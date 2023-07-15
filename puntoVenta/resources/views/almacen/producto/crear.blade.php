@@ -32,18 +32,18 @@
           <div class="card-body">
 
               <div class="form-group">
-                <label for="categoria">Categoría:</label>
-                <select class="form-control" id="categoria" name="categoria">
-                  {{-- @foreach($categorias as $categoria)
-                  <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
-                  @endforeach --}}
+                <label for="id_categoria">Categoría:</label>
+                <select class="form-control" id="id_categoria" name="id_categoria">
+                  @foreach($categorias as $categoria)
+                  <option value="{{ $categoria->id_categoria }}">{{ $categoria->categoria }}</option>
+                  @endforeach
                 </select>
               </div>
 
               <div class="form-group">
-                  <label for="categoria">Nombre</label>
-                  <input type="text" class="form-control" name="categoria" id="categoria" placeholder="Ingresa el nombre de la categoria" value="{{ old('categoria') }}">
-                  @error('categoria')
+                  <label for="nombre">Nombre</label>
+                  <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingresa el nombre del producto" value="{{ old('nombre') }}">
+                  @error('nombre')
                       <div class="text-danger">{{ $message }}</div>
                   @enderror
               </div>
@@ -57,16 +57,21 @@
               </div>
 
               <div class="form-group">
-                  <label for="descripcion">Descripción</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Ingresa la descripcion" value="{{ old('descripcion') }}">
-                  @error('descripcion')
-                      <div class="text-danger">{{ $message }}</div>
-                  @enderror
+                <label for="descripcion">Descripción</label>
+                <textarea class="form-control" name="descripcion" id="descripcion" placeholder="Ingresa la descripción" style="resize: none; height: 80px;">{{ old('descripcion') }}</textarea>
+                @error('descripcion')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
+            
 
               <div class="form-group">
                 <label for="imagen">Imagen:</label>
                 <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                @error('imagen')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+                
               </div>
 
               {{-- Inicio: Botones --}}

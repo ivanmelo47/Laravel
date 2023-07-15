@@ -92,12 +92,10 @@
                                     <td class="align-middle">{{ $prod->stock}}</td>
                                     <td class="align-middle">{{ $prod->descripcion}}</td>
                                     <td class="text-center align-middle">
-                                        <a href="https://via.placeholder.com/300" data-lightbox="example" data-title="Imagen de ejemplo">
-                                            <img src="https://via.placeholder.com/300" alt="Imagen de ejemplo" width="50" height="50">
+                                        <a href="/imagenes/productos/{{ $prod->imagen }}" data-lightbox="example" data-title="Imagen de ejemplo">
+                                            <img src="/imagenes/productos/{{ $prod->imagen }}" alt="Imagen de ejemplo" width="50" height="50">
                                         </a>
                                     </td>
-                                    
-                                    
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -122,7 +122,7 @@ class CategoriaController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-{
+    {
     $categoria = Categoria::findOrFail($id);
     $categoria->estatus = '0';
     $categoria->save();
@@ -130,5 +130,5 @@ class CategoriaController extends Controller
     Alert::success('Éxito', 'La categoría ha sido desactivada exitosamente')->autoclose(3000);
 
     return redirect()->route('categoria');
-}
+    }
 }
