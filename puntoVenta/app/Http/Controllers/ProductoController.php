@@ -85,7 +85,9 @@ class ProductoController extends Controller
 
         Producto::create($validatedData);
 
-        return redirect('producto');
+        return redirect('producto')->with([
+            'success' => 'Producto registrado con Exito',
+        ]);
     }
 
     /**
@@ -99,9 +101,16 @@ class ProductoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         //
+        $producto = Producto::findOrFail($id);
+        $nombreImagen = $producto->imagen; // Obtener el nombre de la imagen desde la base de datos
+        $rutaImagen = '/imagenes/productos/' . $nombreImagen; // Reemplaza 'ruta/a/la/carpeta/' con la ruta real de la carpeta en tu servidor
+        $urlImagen = asset($rutaImagen); // Construir la URL completa de la imagen
+
+        $categorias = DB::table('categoria')->where('estatus', '=', '1')->get();
+        return view('almacen.producto.editar', ["producto" => Producto::findOrFail($id), "categorias" => $categorias, "urlImagen" => $urlImagen]);
     }
 
     /**
@@ -121,8 +130,14 @@ class ProductoController extends Controller
         $producto->estado = '0';
         $producto->save();
 
-        Session::flash('success_message', 'El registro se eliminó correctamente');
-
-        return redirect()->route('producto');
+        if ($producto) {
+            // Si la eliminación fue exitosa, mostrar mensaje de éxito
+            return redirect()->route('producto')->with([
+                'success' => 'Registro eliminado exitosamente',
+            ]);
+        } else {
+            // Si la eliminación falló, mostrar mensaje de error
+            return redirect()->route('producto')->with('error', 'Error al eliminar el registro');
+        }
     }
 }

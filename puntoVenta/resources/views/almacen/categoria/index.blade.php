@@ -116,6 +116,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+{{-- Alternar entre lista y cuadricula --}}
 <script>
 $(document).ready(function() {
   $("#alternar-listado").click(function() {

@@ -76,10 +76,12 @@
               <div class="form-group">
                 <label for="imagen">Imagen:</label>
                 <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                <a href="#" data-lightbox="image-preview" data-title="Vista previa de la imagen">
+                  <img id="preview" src="#" alt="Vista previa de la imagen" style="display: none; max-width: 100%; max-height: 200px;">
+                </a>
                 @error('imagen')
-                    <div class="text-danger">{{ $message }}</div>
+                  <div class="text-danger">{{ $message }}</div>
                 @enderror
-                
               </div>
 
               {{-- Inicio: Botones --}}
@@ -93,5 +95,21 @@
 
   </div>
 </div>
+
+<script>
+    document.getElementById('imagen').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      var reader = new FileReader();
+  
+      reader.onload = function(e) {
+        var previewImg = document.getElementById('preview');
+        previewImg.setAttribute('src', e.target.result);
+        previewImg.style.display = 'block';
+        previewImg.parentElement.setAttribute('href', e.target.result);
+      }
+  
+      reader.readAsDataURL(file);
+    });
+</script>
 
 @endsection

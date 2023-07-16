@@ -32,6 +32,9 @@
   <!-- DataTable -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
 
+  <!-- CSS de Lightbox -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -394,8 +397,76 @@
 <!-- DataTable -->
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
 
+<!-- JavaScript de Lightbox -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+
+<!-- Mensaje de confirmacion INICIO -->
+<script>
+  function eliminarCategoria(id) {
+      Swal.fire({
+          title: 'Confirmar eliminación',
+          text: '¿Estás seguro de eliminar este registro?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar',
+      }).then((result) => {
+          if (result.isConfirmed) {
+              // Si se confirma la eliminación, enviar la solicitud al controlador
+              document.getElementById('delete-form-' + id).submit();
+          }
+      });
+  }
+</script>
+<!-- Mensaje de confirmacion FIN -->
+
+<!-- Mensajes de Sweet Alert INICIO -->
+@if(session('success'))
+<script>
+    // Función para mostrar el Sweet Alert con retraso
+    function mostrarSweetAlert() {
+        setTimeout(function() {
+            Swal.fire({
+                title: '{{ session('success') }}',
+                text: '',
+                icon: 'success',
+                timer: 3000, // Ocultar automáticamente después de 3 segundos
+                showConfirmButton: false
+            });
+        }, 500); // Retraso de 1 segundo antes de mostrar el Sweet Alert
+    }
+    // Evento que se ejecuta después de que se complete la recarga de la página
+    window.onload = function() {
+        mostrarSweetAlert();
+    };
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    // Función para mostrar el Sweet Alert con retraso
+    function mostrarSweetAlert() {
+        setTimeout(function() {
+            Swal.fire({
+                title: '{{ session('error') }}',
+                text: '',
+                icon: 'error',
+                timer: 3000, // Ocultar automáticamente después de 3 segundos
+                showConfirmButton: false
+            });
+        }, 500); // Retraso de 1 segundo antes de mostrar el Sweet Alert
+    }
+    // Evento que se ejecuta después de que se complete la recarga de la página
+    window.onload = function() {
+        mostrarSweetAlert();
+    };
+</script>
+@endif
+<!-- Mensajes de Sweet Alert FIN -->
+
 </body>
 
 <script>
@@ -439,26 +510,5 @@
       });
   });
   </script>
-
-<script>
-  function eliminarCategoria(id) {
-      Swal.fire({
-          title: '¿Estás seguro?',
-          text: 'Esta acción no se puede deshacer',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sí, eliminar',
-          cancelButtonText: 'Cancelar'
-      }).then((result) => {
-          if (result.isConfirmed) {
-              document.getElementById('delete-form-' + id).submit();
-          }
-      });
-  }
-</script>
-
-
 
 </html>

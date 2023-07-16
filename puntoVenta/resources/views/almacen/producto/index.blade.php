@@ -2,9 +2,6 @@
 
 @section ('contenido')
 
-<!-- CSS de Lightbox -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -76,11 +73,13 @@
                                 <tr>
                                     <td class="align-middle">
                                         <a href="{{ route('producto.edit', $prod->id_producto) }}" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a>
+
                                         <a href="#" class="btn btn-outline-danger btn-sm" onclick="eliminarCategoria({{ $prod->id_producto }})"><i class="fas fa-trash-alt"></i></a>
                                         <form id="delete-form-{{ $prod->id_producto }}" action="{{ route('producto.destroy', $prod->id_producto) }}" method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')
                                         </form>
+                                        
                                     </td>
                                     <td class="align-middle">{{ $prod->id_producto}}</td>
                                     <td class="align-middle">
@@ -114,7 +113,7 @@
 
 
 
-{{-- Imagen emergente --}}
+<!-- Imagen emergente INICIO -->
 <script>
     $(document).ready(function() {
         // Inicializar Lightbox con opciones personalizadas
@@ -126,24 +125,13 @@
         });
     });
 </script>
-
-<script>
-    window.onload = function() {
-        Swal.fire(
-            'Éxito',
-            'El registro se eliminó correctamente',
-            'success'
-        );
-    }
-  </script>
+<!-- Imagen emergente FIN -->
 
 
 
 <!-- jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<!-- JavaScript de Lightbox -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 
 @endsection

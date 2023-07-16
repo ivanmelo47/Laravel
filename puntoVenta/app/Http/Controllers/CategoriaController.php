@@ -67,7 +67,9 @@ class CategoriaController extends Controller
         $validatedData['estatus'] = '1';
         Categoria::create($validatedData);
 
-        return redirect('categoria');
+        return redirect('categoria')->with([
+            'success' => 'Categoria registrada con Exito',
+        ]);
     }
 
     /**
@@ -115,7 +117,9 @@ class CategoriaController extends Controller
         $categoria->descripcion = $request->input('descripcion');
         $categoria->update();
 
-        return redirect('categoria');
+        return redirect('categoria')->with([
+            'success' => 'Categoria actualizada con Exito', 
+        ]);;
     }
 
     /**
@@ -129,6 +133,8 @@ class CategoriaController extends Controller
 
     Alert::success('Éxito', 'La categoría ha sido desactivada exitosamente')->autoclose(3000);
 
-    return redirect()->route('categoria');
+    return redirect()->route('categoria')->with([
+        'success' => 'Categoria eliminada con Exito',
+    ]);
     }
 }
