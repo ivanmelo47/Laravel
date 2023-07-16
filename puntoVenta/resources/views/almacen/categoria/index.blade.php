@@ -23,23 +23,22 @@
 <section class="section">
     <div class="row" id="table-hover-row">
         <div class="col-12">
-            <div class="card">
+            <div class="card p-2">
                 <div class="card-header">
                     <div class="col-xl-12">
                         <form action="{{ route('categoria') }}" method="get">
 
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="input-group mb-6">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                                        <input type="text" class="form-control" name="texto" placeholder="Buscar categorías" value="{{$texto}}" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Buscar</button>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="input-group mb-6">
-                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-plus-circle-fill"></i></span>
-                                        <a href="{{ route('categoria.crear') }}" class="btn btn-success">Nueva</a>
+                                    <div class="input-group mb-3 d-flex align-items-center">
+
+                                        <div class="mx-3">
+                                            <div class="input-group-append">
+                                                <a href="{{ route('categoria.crear') }}" class="btn btn-success">Nuevo</a>
+                                            </div>
+                                        </div>
+                                        
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -52,7 +51,7 @@
                     </div>
                     <!-- table hover -->
                     <div class="table-responsive" id="table-listado">
-                        <table class="table table-hover table-bordered mb-0">
+                        <table id="myTable" class="table table-hover table-bordered mb-0">
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
@@ -124,22 +123,18 @@ $(document).ready(function() {
     $("#grid-listado").toggle();
   });
 });
-
-function eliminarCategoria(id) {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    text: 'Esta acción no se puede deshacer',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Sí, eliminar',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      document.getElementById('delete-form-' + id).submit();
-    }
-  });
-}
 </script>
+
+<script>
+    window.onload = function() {
+        @if(Session::has('success_message'))
+            Swal.fire(
+                'Éxito',
+                '{{ Session::get('success_message') }}',
+                'success'
+            );
+        @endif
+    }
+</script>
+
 @endsection

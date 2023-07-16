@@ -41,6 +41,14 @@
               </div>
 
               <div class="form-group">
+                <label for="codigo">Codigo</label>
+                <input type="text" class="form-control" name="codigo" id="codigo" placeholder="Ingresa el codigo del producto" value="{{ old('codigo') }}">
+                @error('codigo')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+              <div class="form-group">
                   <label for="nombre">Nombre</label>
                   <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingresa el nombre del producto" value="{{ old('nombre') }}">
                   @error('nombre')

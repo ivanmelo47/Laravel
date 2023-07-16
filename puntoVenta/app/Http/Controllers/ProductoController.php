@@ -10,6 +10,7 @@ use App\Http\Requests\CategoriaFormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -49,6 +50,7 @@ class ProductoController extends Controller
     {
         // Validación de los campos
         $validator = Validator::make($request->all(), [
+            'codigo' => 'required|unique:producto,codigo',
             'nombre' => 'required|unique:producto,nombre',
             'stock' => 'required|integer|min:1',
             'descripcion' => 'required',
@@ -113,8 +115,14 @@ class ProductoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $producto = Producto::findOrFail($id);
+        $producto->estado = '0';
+        $producto->save();
+
+        Session::flash('success_message', 'El registro se eliminó correctamente');
+
+        return redirect()->route('producto');
     }
 }
