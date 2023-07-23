@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 14-07-2023 a las 04:28:44
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Jul 23, 2023 at 10:25 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `punto_venta`
+-- Database: `punto_venta`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `categoria`
+-- Table structure for table `categoria`
 --
 
 CREATE TABLE `categoria` (
@@ -35,23 +35,23 @@ CREATE TABLE `categoria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `categoria`
+-- Dumping data for table `categoria`
 --
 
 INSERT INTO `categoria` (`id_categoria`, `categoria`, `descripcion`, `estatus`) VALUES
 (1, 'Deportes', 'Todos los artículos de deportes.', 1),
 (2, 'Cat 1', 'Todos los productos de la categoria 1.', 1),
 (3, 'Cat 2', 'Todos los productos de la categoria 2.', 1),
-(4, 'Cat 3', 'Todos los productos de la categoria 3.', 1),
-(5, 'Cat 4', 'Todos los articulos de categoria 4.', 1),
-(6, 'Cat 5', 'Todos los articulos de categoria 5.', 1),
-(7, 'Cat 6', 'Todos los articulos de categoria 6.', 1),
-(8, 'Cat 7', 'Todos los articulos de categoria 7.', 1);
+(4, 'Cat 3', 'Todos los productos de la categoria 3.', 0),
+(5, 'Cat 4', 'Todos los articulos de categoria 4.', 0),
+(6, 'Cat 5', 'Todos los articulos de categoria 5.', 0),
+(7, 'Cat 6', 'Todos los articulos de categoria 6.', 0),
+(8, 'Cat 7', 'Todos los articulos de categoria 7.', 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detalle_ingreso`
+-- Table structure for table `detalle_ingreso`
 --
 
 CREATE TABLE `detalle_ingreso` (
@@ -66,7 +66,7 @@ CREATE TABLE `detalle_ingreso` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detalle_venta`
+-- Table structure for table `detalle_venta`
 --
 
 CREATE TABLE `detalle_venta` (
@@ -81,7 +81,7 @@ CREATE TABLE `detalle_venta` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ingreso`
+-- Table structure for table `ingreso`
 --
 
 CREATE TABLE `ingreso` (
@@ -97,7 +97,7 @@ CREATE TABLE `ingreso` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `persona`
+-- Table structure for table `persona`
 --
 
 CREATE TABLE `persona` (
@@ -114,7 +114,7 @@ CREATE TABLE `persona` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `producto`
+-- Table structure for table `producto`
 --
 
 CREATE TABLE `producto` (
@@ -128,10 +128,21 @@ CREATE TABLE `producto` (
   `estado` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `producto`
+--
+
+INSERT INTO `producto` (`id_producto`, `id_categoria`, `codigo`, `nombre`, `stock`, `descripcion`, `imagen`, `estado`) VALUES
+(1, 1, NULL, 'Balon de Futboll', 34, 'Hermoso Balon de Futboll para toda la familia.', 'roHRGwGeL8h9kduRxkeqgKzpOvKsVX_1689455379.png', '0'),
+(2, 5, NULL, 'ddsds', 34, 'dsdsdsdsdsds', '97fnyYRPJw9rWFFvw9auQSvN1nRlHo_1689455863.png', '0'),
+(3, 8, NULL, 'sdsdsds', 34, 'fdfdfsdsdsdsdsd', 'Z3krXQZXv712KT3FzdB5mYPqHCDxer_1689455877.png', '0'),
+(4, 1, '4435454334', 'Calcetas', 34, 'Calcetas para hacer deporte.', '9k3UphtT3fJRUuZPxp32Vlb52PQwod_1689463964.png', '1'),
+(5, 1, '44354543341', 'ssdsdsds', 34, 'dsdsdsddsdsdssdsd', 'qvKpYMXplQgEAVUPjR08EbsfLQl6t4_1689464000.png', '1');
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `venta`
+-- Table structure for table `venta`
 --
 
 CREATE TABLE `venta` (
@@ -146,17 +157,17 @@ CREATE TABLE `venta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `categoria`
+-- Indexes for table `categoria`
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`id_categoria`);
 
 --
--- Indices de la tabla `detalle_ingreso`
+-- Indexes for table `detalle_ingreso`
 --
 ALTER TABLE `detalle_ingreso`
   ADD PRIMARY KEY (`id_detalle_ingreso`),
@@ -164,7 +175,7 @@ ALTER TABLE `detalle_ingreso`
   ADD KEY `detalle_ingreso_producto` (`id_producto`);
 
 --
--- Indices de la tabla `detalle_venta`
+-- Indexes for table `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
   ADD PRIMARY KEY (`id_detalle_venta`),
@@ -172,110 +183,110 @@ ALTER TABLE `detalle_venta`
   ADD KEY `detalle_venta_venta` (`id_venta`);
 
 --
--- Indices de la tabla `ingreso`
+-- Indexes for table `ingreso`
 --
 ALTER TABLE `ingreso`
   ADD PRIMARY KEY (`id_ingreso`),
   ADD KEY `ingreso_persona` (`id_proveedor`);
 
 --
--- Indices de la tabla `persona`
+-- Indexes for table `persona`
 --
 ALTER TABLE `persona`
   ADD PRIMARY KEY (`id_persona`);
 
 --
--- Indices de la tabla `producto`
+-- Indexes for table `producto`
 --
 ALTER TABLE `producto`
   ADD PRIMARY KEY (`id_producto`),
   ADD KEY `producto_categoria` (`id_categoria`);
 
 --
--- Indices de la tabla `venta`
+-- Indexes for table `venta`
 --
 ALTER TABLE `venta`
   ADD PRIMARY KEY (`id_venta`),
   ADD KEY `venta_persona` (`id_cliente`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `categoria`
+-- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT de la tabla `detalle_ingreso`
+-- AUTO_INCREMENT for table `detalle_ingreso`
 --
 ALTER TABLE `detalle_ingreso`
   MODIFY `id_detalle_ingreso` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `detalle_venta`
+-- AUTO_INCREMENT for table `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
   MODIFY `id_detalle_venta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `ingreso`
+-- AUTO_INCREMENT for table `ingreso`
 --
 ALTER TABLE `ingreso`
   MODIFY `id_ingreso` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `persona`
+-- AUTO_INCREMENT for table `persona`
 --
 ALTER TABLE `persona`
   MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `producto`
+-- AUTO_INCREMENT for table `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `venta`
+-- AUTO_INCREMENT for table `venta`
 --
 ALTER TABLE `venta`
   MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `detalle_ingreso`
+-- Constraints for table `detalle_ingreso`
 --
 ALTER TABLE `detalle_ingreso`
   ADD CONSTRAINT `detalle_ingreso_ingreso` FOREIGN KEY (`id_ingreso`) REFERENCES `ingreso` (`id_ingreso`),
   ADD CONSTRAINT `detalle_ingreso_producto` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`);
 
 --
--- Filtros para la tabla `detalle_venta`
+-- Constraints for table `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
   ADD CONSTRAINT `detalle_venta_producto` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`),
   ADD CONSTRAINT `detalle_venta_venta` FOREIGN KEY (`id_venta`) REFERENCES `venta` (`id_venta`);
 
 --
--- Filtros para la tabla `ingreso`
+-- Constraints for table `ingreso`
 --
 ALTER TABLE `ingreso`
   ADD CONSTRAINT `ingreso_persona` FOREIGN KEY (`id_proveedor`) REFERENCES `persona` (`id_persona`);
 
 --
--- Filtros para la tabla `producto`
+-- Constraints for table `producto`
 --
 ALTER TABLE `producto`
   ADD CONSTRAINT `producto_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`);
 
 --
--- Filtros para la tabla `venta`
+-- Constraints for table `venta`
 --
 ALTER TABLE `venta`
   ADD CONSTRAINT `venta_persona` FOREIGN KEY (`id_cliente`) REFERENCES `persona` (`id_persona`);
