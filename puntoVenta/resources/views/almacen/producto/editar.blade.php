@@ -7,7 +7,7 @@
   <div class="container-fluid">
       <div class="row mb-2">
           <div class="col-sm-6">
-              <h1 class="m-0">REGISTRAR NUEVO PRODUCTO</h1>
+              <h1 class="m-0">EDITANDO EL PRODUCTO DE: {{ $producto->nombre }}</h1> 
           </div><!-- /.col -->
           <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -24,11 +24,14 @@
 <div class="col-md-8">
   <div class="card card-primary">
       <div class="card-header">
-          <h3 class="card-title">Nuevo Producto</h3>
+          <h3 class="card-title">Editando Producto</h3>
       </div>
 
-      <form action="{{ route('producto.store') }}" method="POST" class="form" enctype="multipart/form-data">
+      <form action="{{ route('producto.update') }}" method="POST" class="form" enctype="multipart/form-data">
           @csrf
+
+          <input type="hidden" name="id_producto" value="{{ $producto->id_producto }}">
+
           <div class="card-body">
 
               <div class="form-group">

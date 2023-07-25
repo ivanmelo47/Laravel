@@ -13,7 +13,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
@@ -71,7 +73,6 @@ class ProductoController extends Controller
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
             $nombreImagen = Str::random(30) . '_' . time() . '.' . $imagen->getClientOriginalExtension();
-            $rutaImagen = $imagen->storeAs('public/imagenes/productos', $nombreImagen);
 
             // Verificar si la carpeta existe y crearla si es necesario
             $directorio = public_path('imagenes/productos');
@@ -116,9 +117,74 @@ class ProductoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        /* Caputurando el ID para saber que registro se a de actualizar */
+        $pid = $request->id_producto;
+
+        // Validaciónde los campos
+        $validator = Validator::make($request->all(), [
+            'codigo' => [
+                'required',
+                Rule::unique('producto', 'codigo')->ignore($pid, 'id_producto'),
+            ],
+            'nombre' => [
+                'required',
+                Rule::unique('producto', 'nombre')->ignore($pid, 'id_producto'),
+            ],
+
+            'stock' => 'required|integer|min:1',
+            'descripcion' => 'required|min:10|max:510',
+
+            'imagen' => [
+                'nullable', // Permite que el campo esté vacío
+                'image',
+                'mimes:jpeg,png,jpg,gif',
+                'max:2048',
+            ]
+        ]);
+
+        // Comprueba si la validación falla
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Si la validación pasa, actualiza el registro
+        $producto = Producto::findOrFail($pid);
+        $producto->fill([
+            'id_categoria' => $request->input('id_categoria'),
+            'codigo' => $request->input('codigo'),
+            'nombre' => $request->input('nombre'),
+            'stock' => $request->input('stock'),
+            'descripcion' => $request->input('descripcion'),
+        ]);
+
+        // Elimina la imagen anterior del servidor si existe y sube la nueva imagen
+        if ($request->hasFile('imagen') && $producto->imagen) {
+
+            //Elimar la imagen anterior del servidor
+            $rutaImagenAnterior = public_path('imagenes/productos/' . $producto->imagen);
+            if (file_exists($rutaImagenAnterior)) {
+                unlink($rutaImagenAnterior);
+            }
+
+            //Nombre de la nueva imagen
+            $imagen = $request->file('imagen');
+            $nombreImagen = Str::random(30) . '_' . time() . '.' . $imagen->getClientOriginalExtension();
+
+            // Sube y actualiza el nombre de la nueva imagen
+            $directorio = public_path('imagenes/productos/');
+            $imagenRecortada = Image::make($imagen)->fit(600, 600);
+            $imagenRecortada->save($directorio . $nombreImagen);
+            $producto->imagen = $nombreImagen;
+        }
+
+        $producto->update();
+
+        return redirect('producto')->with([
+            'success' => 'Producto actualizado con Exito',
+        ]);
+        ;
     }
 
     /**
