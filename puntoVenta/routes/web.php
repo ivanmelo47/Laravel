@@ -1,9 +1,10 @@
 <?php
 
-use App\Models\Producto;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,16 @@ use App\Http\Controllers\ProductoController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 /* Rutas de Categoria */
@@ -44,3 +55,9 @@ Route::post('/producto/update', [ProductoController::class, 'update'])->name('pr
 //Eliminacion-anulacion Producto
 Route::delete('/producto/{id}', [ProductoController::class, 'destroy'])->name('producto.destroy');
 
+require __DIR__.'/auth.php';
+
+
+Route::middleware(['auth', 'role:admin'])->group(function(){
+    Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
+}); // End Group Admin
